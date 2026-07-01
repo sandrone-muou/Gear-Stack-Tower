@@ -1,0 +1,6 @@
+{
+  "name": "齿轮堆栈塔",
+  "description": "一个汉诺塔网页游戏，使用流畅的动画交互效果。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
