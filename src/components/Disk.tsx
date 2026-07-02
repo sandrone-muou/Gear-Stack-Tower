@@ -29,16 +29,21 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
     <motion.div
       layoutId={`disk-${size}`}
       className="relative flex items-center justify-center pointer-events-none"
-      style={{ width: `${width}px`, height: '24px' }}
-      animate={{ y: isSelected ? [-30, -38, -30] : 0 }}
+      style={{ width: `${width}px`, height: '24px', zIndex: isSelected ? 50 : 10 }}
       transition={{ 
-        layout: { type: "spring", bounce: 0.2, duration: 0.6 },
-        y: isSelected 
-          ? { repeat: Infinity, duration: 2, ease: "easeInOut" }
-          : { type: "spring", bounce: 0.3, duration: 0.5 }
+        layout: { type: "spring", bounce: 0.2, duration: 0.6 }
       }}
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+      <motion.div 
+        className="w-full h-full relative"
+        animate={{ y: isSelected ? [-30, -38, -30] : 0 }}
+        transition={{ 
+          y: isSelected 
+            ? { repeat: Infinity, duration: 2, ease: "easeInOut" }
+            : { type: "spring", bounce: 0.4, duration: 0.5 }
+        }}
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
         {layers.map((offset, i) => {
           const isTopLayer = i === 0;
           const isBottomLayer = i === layers.length - 1;
@@ -100,6 +105,7 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
           );
         })}
       </div>
+      </motion.div>
     </motion.div>
   );
 }
