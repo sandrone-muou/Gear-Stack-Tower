@@ -7,14 +7,14 @@ interface DiskProps {
   isSelected: boolean;
 }
 
-// Adjusted colors to look more like brass/metallic/pastel puzzle gears
+// Macaron palette for the disks (higher saturation)
 const colors: Record<DiskSize, { top: string, side: string, inner: string, ring: string }> = {
-  1: { top: '#D8B4E2', side: '#A77FB2', inner: '#B88CC4', ring: '#EAD1F0' }, // Purple-ish
-  2: { top: '#A9C5E8', side: '#7599C4', inner: '#8FAED2', ring: '#CBE0F5' }, // Blue-ish
-  3: { top: '#A3D9A5', side: '#6CB56F', inner: '#88C68A', ring: '#C6EAC8' }, // Green-ish
-  4: { top: '#F5D77F', side: '#C9A644', inner: '#E0BB55', ring: '#FBE8A4' }, // Yellow/Gold
-  5: { top: '#F4B07B', side: '#C67D42', inner: '#DF9258', ring: '#FAD0AF' }, // Orange-ish
-  6: { top: '#E88F8F', side: '#BA5757', inner: '#D17373', ring: '#F3ADAD' }, // Red-ish
+  1: { top: '#FCA5A5', side: '#F87171', inner: '#EF4444', ring: '#FECACA' }, // Rose/Pink
+  2: { top: '#FCD34D', side: '#FBBF24', inner: '#F59E0B', ring: '#FDE68A' }, // Amber/Yellow
+  3: { top: '#86EFAC', side: '#4ADE80', inner: '#22C55E', ring: '#BBF7D0' }, // Mint Green
+  4: { top: '#93C5FD', side: '#60A5FA', inner: '#3B82F6', ring: '#BFDBFE' }, // Sky Blue
+  5: { top: '#C4B5FD', side: '#A78BFA', inner: '#8B5CF6', ring: '#DDD6FE' }, // Lavender Purple
+  6: { top: '#F9A8D4', side: '#F472B6', inner: '#EC4899', ring: '#FBCFE8' }, // Bubblegum Pink
 };
 
 export function Disk({ size, isTop, isSelected }: DiskProps) {
@@ -28,10 +28,15 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
   return (
     <motion.div
       layoutId={`disk-${size}`}
-      className="relative flex items-center justify-center pointer-events-none will-change-transform"
+      className="relative flex items-center justify-center pointer-events-none"
       style={{ width: `${width}px`, height: '24px' }}
-      animate={{ y: isSelected ? -30 : 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 25, mass: 0.8 }}
+      animate={{ y: isSelected ? [-30, -38, -30] : 0 }}
+      transition={{ 
+        layout: { type: "spring", bounce: 0.2, duration: 0.6 },
+        y: isSelected 
+          ? { repeat: Infinity, duration: 2, ease: "easeInOut" }
+          : { type: "spring", bounce: 0.3, duration: 0.5 }
+      }}
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
         {layers.map((offset, i) => {
@@ -42,7 +47,7 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
           return (
             <div 
               key={i}
-              className="absolute inset-0 flex items-center justify-center will-change-transform"
+              className="absolute inset-0 flex items-center justify-center"
               style={{ transform: `translateY(${offset}px)` }}
             >
               {/* Gear Body scaled to isometric */}
@@ -82,7 +87,7 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
                     <div className="absolute top-[36%] left-[36%] w-[28%] h-[28%] rounded-full shadow-[0_3px_6px_rgba(0,0,0,0.3),inset_0_2px_3px_rgba(255,255,255,0.6)] border border-black/5" style={{ backgroundColor: c.ring }}></div>
                     
                     {/* Center Hole for the peg */}
-                    <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[26px] h-[26px] rounded-full bg-[#3E2723] shadow-[inset_0_6px_10px_rgba(0,0,0,0.8)] border-[3px] border-[#5C3A21]"></div>
+                    <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[26px] h-[26px] rounded-full bg-white shadow-[inset_0_6px_10px_rgba(0,0,0,0.2)] border-[3px] border-slate-200"></div>
                     
                     {/* Top Edge Highlight on the gear rim to make it pop */}
                     <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none opacity-60">
