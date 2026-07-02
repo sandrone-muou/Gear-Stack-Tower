@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { RotateCcw, Maximize, Minimize } from 'lucide-react';
+import { RotateCcw, Maximize, Minimize, Info } from 'lucide-react';
 import { Peg } from './components/Peg';
 import { DiskSize } from './types';
 
@@ -17,6 +17,7 @@ export default function App() {
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isWon, setIsWon] = useState(false);
+  const [showRules, setShowRules] = useState(true);
   const [scale, setScale] = useState(1);
   const [isPortrait, setIsPortrait] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -157,6 +158,14 @@ export default function App() {
 
           <div className="pointer-events-auto flex items-center gap-2">
             <button 
+              onClick={() => setShowRules(true)}
+              className="flex items-center justify-center p-2 md:px-5 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/20 shadow-lg cursor-pointer"
+              title="游戏规则"
+            >
+              <Info className="w-5 h-5 md:w-5 md:h-5" />
+              <span className="font-medium text-sm md:text-base hidden md:block ml-2">规则</span>
+            </button>
+            <button 
               onClick={toggleFullscreen}
               className="flex items-center justify-center p-2 md:px-5 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/20 shadow-lg cursor-pointer"
               title={isFullscreen ? "退出全屏" : "全屏"}
@@ -240,6 +249,25 @@ export default function App() {
               className="px-8 py-3 w-full bg-green-600 hover:bg-green-500 rounded-full font-bold text-lg md:text-xl transition-all shadow-lg border-b-4 border-green-800 active:border-b-0 active:translate-y-1 cursor-pointer"
             >
               再来一局
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showRules && (
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center px-4 animate-in fade-in duration-300 pointer-events-auto">
+          <div className="bg-[#a67c52] p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-amber-900 text-white max-w-sm md:max-w-md w-full">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">游戏规则</h2>
+            <div className="space-y-3 mb-8 bg-black/20 p-5 rounded-2xl text-base md:text-lg">
+              <p className="flex gap-2"><span>1.</span> <span>每次只能移动一个齿轮。</span></p>
+              <p className="flex gap-2"><span>2.</span> <span>较大的齿轮不能放置在较小的齿轮上面。</span></p>
+              <p className="flex gap-2"><span>3.</span> <span>将所有齿轮从初始柱子移动到另一侧的柱子即可获胜。</span></p>
+            </div>
+            <button 
+              onClick={() => setShowRules(false)}
+              className="px-8 py-3 w-full bg-blue-600 hover:bg-blue-500 rounded-full font-bold text-lg md:text-xl transition-all shadow-lg border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 cursor-pointer"
+            >
+              我知道了
             </button>
           </div>
         </div>

@@ -22,19 +22,19 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
   const width = size * 22 + 50; 
   const c = colors[size];
   
-  // 12 layers for seamless 24px thickness (2px per layer)
-  const layers = Array.from({ length: 12 });
+  // 7 layers for performance while maintaining 3D look
+  const layers = [0, 4, 8, 12, 16, 20, 24];
 
   return (
     <motion.div
       layoutId={`disk-${size}`}
-      className="relative flex items-center justify-center pointer-events-none"
+      className="relative flex items-center justify-center pointer-events-none will-change-transform"
       style={{ width: `${width}px`, height: '24px' }}
       animate={{ y: isSelected ? -30 : 0 }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25, mass: 0.8 }}
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
-        {layers.map((_, i) => {
+        {layers.map((offset, i) => {
           const isTopLayer = i === 0;
           const isBottomLayer = i === layers.length - 1;
           const fill = isTopLayer ? c.top : c.side;
@@ -42,8 +42,8 @@ export function Disk({ size, isTop, isSelected }: DiskProps) {
           return (
             <div 
               key={i}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ transform: `translateY(${i * 2}px)` }}
+              className="absolute inset-0 flex items-center justify-center will-change-transform"
+              style={{ transform: `translateY(${offset}px)` }}
             >
               {/* Gear Body scaled to isometric */}
               <div 
