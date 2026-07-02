@@ -106,38 +106,41 @@ export default function App() {
         </button>
       </div>
 
-      <div className="relative z-10 mt-24 w-[900px] h-[360px] flex items-end justify-center">
-        {/* Base Layer */}
-        <div className="absolute inset-0 top-[160px]">
-          {/* Base shadow */}
-          <div className="absolute top-[80px] left-[20px] right-[20px] bottom-[-30px] bg-black/40 blur-2xl rounded-[40px]"></div>
+      <div className="relative z-10 mt-16 w-[900px] h-[400px] flex items-end justify-center">
+        {/* Base Layer (3D Extruded Board) */}
+        <div className="absolute bottom-[20px] w-[850px] h-[160px]">
+          {/* Shadow */}
+          <div className="absolute top-[60px] left-[30px] right-[30px] h-[100px] bg-black/40 blur-2xl rounded-[100px]"></div>
+
+          {/* Wooden Board Stack (simulating 3D thickness) */}
+          <div className="absolute inset-0 top-[30px] bg-[#5C3A21] rounded-[60px]"></div>
+          <div className="absolute inset-0 top-[25px] bottom-[5px] bg-[#6F4420] rounded-[60px]"></div>
+          <div className="absolute inset-0 top-[20px] bottom-[10px] bg-[#8B5A2B] rounded-[60px]"></div>
+          <div className="absolute inset-0 top-[15px] bottom-[15px] bg-[#9C6531] rounded-[60px]"></div>
+          <div className="absolute inset-0 top-[10px] bottom-[20px] bg-[#B27337] rounded-[60px]"></div>
+          <div className="absolute inset-0 top-[5px] bottom-[25px] bg-[#C18143] rounded-[60px]"></div>
           
-          {/* Base bottom thickness */}
-          <div className="absolute top-[30px] left-0 right-0 bottom-0 bg-[#8B5A2B] rounded-[40px] shadow-2xl">
-             <div className="absolute bottom-0 left-[20px] right-[20px] h-[30px] bg-[#5C3A21] rounded-b-[20px] opacity-60"></div>
-          </div>
-          
-          {/* Base top face */}
-          <div className="absolute top-0 left-0 right-0 bottom-[40px] bg-[#DEB887] rounded-[40px] border-b-[8px] border-[#C19A6B] border-t-4 border-[#F5DEB3] shadow-[inset_0_0_60px_rgba(139,90,43,0.3)]">
+          {/* Top Face */}
+          <div className="absolute inset-0 bottom-[30px] bg-[#DEB887] rounded-[60px] border-[3px] border-[#C19A6B] shadow-[inset_0_0_80px_rgba(139,90,43,0.3)] overflow-hidden">
               {/* Inner border detail */}
-              <div className="absolute inset-4 border-2 border-[#8B5A2B] opacity-30 rounded-[28px]"></div>
+              <div className="absolute inset-4 border-[2px] border-[#8B5A2B] opacity-30 rounded-[45px]"></div>
               
-              {/* Diamonds */}
-              <div className="absolute bottom-6 left-0 right-0 flex justify-between px-28">
+              {/* Decorative Diamonds */}
+              <div className="absolute bottom-[25px] left-0 right-0 flex justify-between px-[120px]">
                 <div className="flex gap-8 opacity-90 transform scale-y-[0.6]">
-                  <div className="w-6 h-6 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-2 border-[#DAA520]"></div>
-                  <div className="w-6 h-6 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-2 border-[#DAA520]"></div>
+                  <div className="w-5 h-5 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-[2px] border-[#DAA520]"></div>
+                  <div className="w-5 h-5 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-[2px] border-[#DAA520]"></div>
                 </div>
                 <div className="flex gap-8 opacity-90 transform scale-y-[0.6]">
-                  <div className="w-6 h-6 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-2 border-[#DAA520]"></div>
-                  <div className="w-6 h-6 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-2 border-[#DAA520]"></div>
+                  <div className="w-5 h-5 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-[2px] border-[#DAA520]"></div>
+                  <div className="w-5 h-5 bg-[#FFD700] rotate-45 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_4px_4px_6px_rgba(0,0,0,0.4)] border-[2px] border-[#DAA520]"></div>
                 </div>
               </div>
           </div>
         </div>
 
         {/* Pegs Layer */}
-        <div className="absolute top-0 left-0 right-0 bottom-[55px] flex justify-around items-end px-[40px]">
+        <div className="absolute bottom-[75px] w-[850px] flex justify-around items-end px-[40px]">
           {pegs.map((pegDisks, i) => (
             <Peg 
               key={i} 

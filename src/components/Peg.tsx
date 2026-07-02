@@ -32,13 +32,13 @@ export function Peg({ id, disks, isSelected, onSelect }: PegProps) {
       </div>
 
       {/* Base connecting the stick to the board */}
-      <div className="absolute bottom-[20px] left-1/2 -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-[#5C3A21] transform scale-y-[0.55] shadow-[0_10px_20px_rgba(0,0,0,0.8)] border-[2px] border-[#3E2723]"></div>
-      <div className="absolute bottom-[24px] left-1/2 -translate-x-1/2 w-[52px] h-[52px] rounded-full bg-[#A06C3B] transform scale-y-[0.55]"></div>
+      <div className="absolute bottom-[20px] left-1/2 -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-[#4A2E1A] transform scale-y-[0.55] shadow-[0_6px_12px_rgba(0,0,0,0.7)] border-[2px] border-[#2C1B0F]"></div>
+      <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-[52px] h-[52px] rounded-full bg-[#8B5A2B] transform scale-y-[0.55]"></div>
 
       {/* The stick (Cylinder in isometric) */}
-      <div className="absolute bottom-[44px] w-[18px] h-[220px] bg-gradient-to-r from-[#5C3A21] via-[#A06C3B] to-[#5C3A21] shadow-2xl">
+      <div className="absolute bottom-[44px] w-[18px] h-[220px] bg-gradient-to-r from-[#4A2E1A] via-[#8B5A2B] to-[#4A2E1A] shadow-2xl">
         {/* Stick top face */}
-        <div className="absolute -top-3 left-0 w-full h-[18px] rounded-full bg-[#C18A52] transform scale-y-[0.55] shadow-inner">
+        <div className="absolute -top-3 left-0 w-full h-[18px] rounded-full bg-[#A56B33] transform scale-y-[0.55] shadow-inner">
            {/* Decorative tip base */}
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[24px] h-[24px] rounded-full bg-[#FFD700] shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.4)] border-2 border-[#DAA520]"></div>
         </div>
@@ -49,7 +49,7 @@ export function Peg({ id, disks, isSelected, onSelect }: PegProps) {
       </div>
       
       {/* Disks container */}
-      <div className="absolute bottom-[44px] flex flex-col-reverse items-center justify-start w-full z-10 pointer-events-none">
+      <div className="absolute bottom-[36px] flex flex-col-reverse items-center justify-start w-full z-10 pointer-events-none">
         {disks.map((disk, index) => {
           const isTop = index === disks.length - 1;
           return (
