@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer base {
+  html, body {
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
