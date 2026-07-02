@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { RotateCcw, Smartphone } from 'lucide-react';
+import { RotateCcw, Maximize, Minimize } from 'lucide-react';
 import { Peg } from './components/Peg';
 import { DiskSize } from './types';
 
@@ -18,22 +18,48 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isWon, setIsWon] = useState(false);
   const [scale, setScale] = useState(1);
+  const [isPortrait, setIsPortrait] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    const updateScale = () => {
+    const updateLayout = () => {
+      const isPort = window.innerHeight > window.innerWidth;
+      setIsPortrait(isPort);
       const BASE_WIDTH = 950;
       const BASE_HEIGHT = 500;
-      const availableWidth = window.innerWidth;
-      const availableHeight = window.innerHeight;
+      const availableWidth = isPort ? window.innerHeight : window.innerWidth;
+      const availableHeight = isPort ? window.innerWidth : window.innerHeight;
       const scaleX = availableWidth / BASE_WIDTH;
       const scaleY = availableHeight / BASE_HEIGHT;
       setScale(Math.min(1, scaleX, scaleY));
     };
     
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+    return () => window.removeEventListener('resize', updateLayout);
   }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.error("Error attempting to enable fullscreen:", e);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+    }
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -98,33 +124,55 @@ export default function App() {
     return `${s}秒`;
   };
 
+  const wrapperStyle = isPortrait ? {
+    width: '100vh',
+    height: '100vw',
+    transform: 'rotate(90deg)',
+    transformOrigin: 'top left',
+    position: 'absolute' as const,
+    top: 0,
+    left: '100vw',
+  } : {
+    width: '100%',
+    height: '100%',
+  };
+
   return (
-    <div className="fixed inset-0 w-full h-[100dvh] bg-[#5c4033] flex flex-col overflow-hidden font-sans touch-none">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#8B5A2B]/40 via-[#5C3A21]/60 to-[#3E2723]/90 pointer-events-none"></div>
-      
-      {/* Header Info */}
-      <div className="relative z-20 flex justify-between items-start p-4 md:p-8 pointer-events-none">
-        <div className="text-white/90 space-y-1 pointer-events-auto">
-          <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-4 drop-shadow-md">齿轮堆栈塔</h1>
-          <p className="text-sm opacity-90 drop-shadow hidden md:block">将所有齿轮移动至另一侧</p>
-          <p className="text-sm opacity-90 drop-shadow hidden md:block mb-6">需保持较小的齿轮在上</p>
-          
-          <div className="mt-2 md:mt-8 space-y-1 md:space-y-2">
-            <p className="text-sm md:text-lg font-medium drop-shadow">移动步数: {moves}</p>
-            <p className="text-sm md:text-lg font-medium drop-shadow">挑战时间: {formatTime(time)}</p>
+    <div className="fixed inset-0 w-full h-[100dvh] bg-[#5c4033] overflow-hidden font-sans touch-none">
+      <div style={wrapperStyle} className="flex flex-col relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#8B5A2B]/40 via-[#5C3A21]/60 to-[#3E2723]/90 pointer-events-none"></div>
+        
+        {/* Header Info */}
+        <div className="relative z-20 flex justify-between items-start p-4 md:p-8 pointer-events-none">
+          <div className="text-white/90 space-y-1 pointer-events-auto">
+            <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-4 drop-shadow-md">齿轮堆栈塔</h1>
+            <p className="text-sm opacity-90 drop-shadow hidden md:block">将所有齿轮移动至另一侧</p>
+            <p className="text-sm opacity-90 drop-shadow hidden md:block mb-6">需保持较小的齿轮在上</p>
+            
+            <div className="mt-2 md:mt-8 space-y-1 md:space-y-2">
+              <p className="text-sm md:text-lg font-medium drop-shadow">移动步数: {moves}</p>
+              <p className="text-sm md:text-lg font-medium drop-shadow">挑战时间: {formatTime(time)}</p>
+            </div>
+          </div>
+
+          <div className="pointer-events-auto flex items-center gap-2">
+            <button 
+              onClick={toggleFullscreen}
+              className="flex items-center justify-center p-2 md:px-5 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/20 shadow-lg cursor-pointer"
+              title={isFullscreen ? "退出全屏" : "全屏"}
+            >
+              {isFullscreen ? <Minimize className="w-5 h-5 md:w-5 md:h-5" /> : <Maximize className="w-5 h-5 md:w-5 md:h-5" />}
+              <span className="font-medium text-sm md:text-base hidden md:block ml-2">{isFullscreen ? "退出" : "全屏"}</span>
+            </button>
+            <button 
+              onClick={resetGame}
+              className="flex items-center gap-1 md:gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/20 shadow-lg cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="font-medium text-sm md:text-base">重新开始</span>
+            </button>
           </div>
         </div>
-
-        <div className="pointer-events-auto">
-          <button 
-            onClick={resetGame}
-            className="flex items-center gap-1 md:gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/20 shadow-lg cursor-pointer"
-          >
-            <RotateCcw className="w-4 h-4 md:w-5 md:h-5" />
-            <span className="font-medium text-sm md:text-base">重新开始</span>
-          </button>
-        </div>
-      </div>
 
       {/* Game Board Container */}
       <div className="flex-1 flex items-center justify-center relative z-10 w-full overflow-hidden">
@@ -197,14 +245,6 @@ export default function App() {
         </div>
       )}
       
-      {/* Portrait orientation prompt overlay */}
-      <div className="md:hidden portrait:flex hidden fixed inset-0 z-[100] bg-[#3E2723] flex-col items-center justify-center text-white text-center px-6">
-        <div className="relative mb-8 flex items-center justify-center w-24 h-24">
-          <Smartphone className="w-16 h-16 animate-[spin_3s_ease-in-out_infinite]" />
-          <div className="absolute inset-0 border-4 border-white/20 rounded-full animate-ping opacity-20"></div>
-        </div>
-        <h2 className="text-2xl font-bold mb-3 drop-shadow-md">推荐横屏游玩</h2>
-        <p className="text-white/80 leading-relaxed text-sm">为了获得最佳视觉和操作体验，<br/>请将手机旋转至横屏，<br/>并确保关闭了方向锁定。</p>
       </div>
     </div>
   );
